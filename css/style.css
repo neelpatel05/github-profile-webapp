@@ -6,3 +6,7 @@ body{
     width: 300px;
     align-content: center;
 }
+
+.modal{
+    width: 50%;
+}

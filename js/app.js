@@ -9,6 +9,27 @@ var login;
 var location1;
 var blog;
 
+function getjson(url){
+    return new Promise(function(resolve,reject){
+        var http = new XMLHttpRequest();
+
+        http.open("GET",url,true);
+
+        http.onload = function(){
+            if(http.status === 200){
+                resolve(JSON.parse(http.response));
+            }else{
+                reject(http.statusText);
+            }
+        };
+
+        http.onerror = function(){
+            reject(http.statusText);
+        };
+
+        http.send();
+    });
+}
 
 window.onload = function() {
 
@@ -49,7 +70,7 @@ window.onload = function() {
             },
             allowOutsideClick: false
         }).then(function (data) {
-            
+
             this.login = data.login;
             this.username = data.name;
             this.followers = data.followers;
@@ -62,7 +83,12 @@ window.onload = function() {
             document.getElementById('body').style.backgroundColor="white";
             document.getElementById('data').style.display = "inline";
             manipulatedata(this.login);
+            publicevents(this.login);
+            getfollowers();
+            getfollowing();
         })
+
+
 
 };
 
@@ -94,8 +120,8 @@ function manipulatedata(){
             cell2.innerText = data[i].language;
             cell3.innerText = data[i].created_at;
             cell4.innerText = data[i].updated_at;
-            var y = data[i].clone_url;
-            cell5.innerHTML = '<button id="cloneurl" class="btn btn-primary" data-clipboard-target="">Copy Clone URL</button>';
+            var y = data[i].html_url;
+            cell5.innerHTML = '<a href="'+y+'" target="_blank"><span class="glyphicon glyphicon-link"></a>';
 
         }
     }).catch(function(error){
@@ -105,24 +131,69 @@ function manipulatedata(){
 
 }
 
-function getjson(url){
-    return new Promise(function(resolve,reject){
-        var http = new XMLHttpRequest();
+function publicevents(login){
 
-        http.open("GET",url,true);
+    var publiceventsurl = "https://api.github.com/users/"+this.login+"/events/public";
+    var publicevents = getjson(publiceventsurl);
 
-        http.onload = function(){
-            if(http.status === 200){
-                resolve(JSON.parse(http.response));
-            }else{
-                reject(http.statusText);
-            }
-        };
+    publicevents.then(function(data){
+        console.log(data);
+        var x = document.getElementById('table-public-events');
+        for(var i=0;i<data.length;i++){
 
-        http.onerror = function(){
-            reject(http.statusText);
-        };
+            //var commit = data[i].payload.commits[0].message;
+            var row = x.insertRow(1);
+            var cell1 = row.insertCell(0);
+            var cell2 = row.insertCell(1);
+            cell1.innerText = data[i].repo.name;
+            cell2.innerHTML = "<span class=\"label label-default\">"+data[i].type+"</span>";
+        }
 
-        http.send();
+    }).catch(function(error){
+        console.log(error);
+    })
+}
+
+function getfollowers(){
+
+    var url = "https://api.github.com/users/"+this.login+"/followers";
+    var getfollowers = getjson(url);
+
+    getfollowers.then(function(data){
+        var x = document.getElementById('table-followers');
+        for(var i=0;i<data.length;i++) {
+            var row = x.insertRow(1);
+            var cell1 = row.insertCell(0);
+            var cell2 = row.insertCell(1);
+            var cell3 = row.insertCell(2);
+            cell1.innerText = data[i].login;
+            cell2.innerText = data[i].type;
+            cell3.innerHTML = '<a href="'+data[i].html_url+'" target="_blank"><span class="glyphicon glyphicon-link"></span></a>';
+        }
+    }).catch(function(error){
+        console.log(error);
+    });
+
+}
+
+function getfollowing(){
+
+    var url = "https://api.github.com/users/"+this.login+"/following";
+    var getfollowing = getjson(url);
+
+    getfollowing.then(function(data){
+        var x = document.getElementById('table-following');
+        for(var i=0;i<data.length;i++) {
+            var row = x.insertRow(1);
+            var cell1 = row.insertCell(0);
+            var cell2 = row.insertCell(1);
+            var cell3 = row.insertCell(2);
+            cell1.innerText = data[i].login;
+            cell2.innerText = data[i].type;
+            cell3.innerHTML = '<a href="'+data[i].html_url+'" target="_blank"><span class="glyphicon glyphicon-link"></span></a>';
+        }
+    }).catch(function(error){
+        console.log(error);
     });
 }
+

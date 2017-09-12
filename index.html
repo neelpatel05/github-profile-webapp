@@ -1,7 +1,8 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
     <title>Github Feed Burner</title>
+    <meta name="theme-color" content="#db5945">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/6.6.10/sweetalert2.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/6.6.10/sweetalert2.css" />
@@ -17,7 +18,7 @@
 <body id="body">
 <div id="data">
     <div class="container" style="margin-top: 30px;">
-        <center><img id="avatar_url" src="" class="img-circle" width="200" height="200"/></center>
+        <center><img alt="Profile Image" id="avatar_url" src="" class="img-circle" width="200" height="200"/></center>
     </div>
     <div class="container">
         <center><h3><span id="username"></span><a id="target" href="" target="_blank"><span class="glyphicon glyphicon-link"></span></a></h3></center>
@@ -28,12 +29,13 @@
                 <span id="name"></span>
             </div>
             <div class="panel-body">
-                <button type="button" class="btn btn-primary">Followers <span class="badge" id="followers"></span></button>
-                <button type="button" class="btn btn-primary">Following <span class="badge" id="following"></span></button>
+                <button type="button" data-toggle="modal" data-target="#myModal1" class="btn btn-primary">Followers <span class="badge" id="followers"></span></button>
+                <button type="button" data-toggle="modal" data-target="#myModal2" class="btn btn-primary">Following <span class="badge" id="following"></span></button>
                 <br><br><button type="button" class="btn btn-primary">Repository <span class="badge" id="repos"></span></button>
             </div>
         </div></center>
     </div>
+    <!-- Repos Table Starts Here -->
     <div class="container">
         <table class="table table-bordered" id="table-repos">
             <tr class="info">
@@ -41,13 +43,40 @@
                 <th>Language Used</th>
                 <th>Date Created</th>
                 <th>Last Push</th>
-                <th>Clone Url</th>
+                <th>Url</th>
+            </tr>
+        </table>
+    </div>
+    <!-- Repos Table Ends Here -->
+    <!-- Public Events Table Starts Here-->
+    <div class="container">
+        <table class="table table-bordered" id="table-public-events">
+            <tr class="info">
+                <th>Repository</th>
+                <th>Public-Event</th>
             </tr>
 
         </table>
     </div>
+    <!-- Public Events Table Ends Here -->
+    <div class="container">
+        <table class="table table-bordered" id="table-followers" width="50%">
+            <tr class="info">
+                <th>Followers</th>
+                <th>Type</th>
+                <th>Github URL</th>
+            </tr>
+        </table>
+    </div>
+    <div class="container">
+        <table class="table table-bordered" id="table-following" width="50%">
+            <tr class="info">
+                <th>Following</th>
+                <th>Type</th>
+                <th>Github URL</th>
+            </tr>
+        </table>
+    </div>
 </div>
-
-
 </body>
 </html>
